@@ -14,6 +14,10 @@ class _BmiScreenState extends State<BmiScreen> {
   double height = 150;
   int weight = 60;
   int age = 25;
+  String? selectedGender; // لتحديد الجنس المختار
+  String? selectedCard; // متغير لتحديد الكارت النشط
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +40,22 @@ class _BmiScreenState extends State<BmiScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const GenderCard(
+                   GenderCard(
+                    onPressed: () => setState(() => selectedGender = "MALE"),
+                    
                       icon: Icons.male,
                       label: "MALE",
-                      color: Color.fromARGB(255, 16, 26, 33)),
+                      color: selectedGender == "MALE"
+                          ? const Color.fromARGB(255, 123, 30, 23)
+                          : const Color(0xff141C22)),
                   SizedBox(width: 10.w),
-                  const GenderCard(
+                   GenderCard(
+                    onPressed: () => setState(() => selectedGender = "FEMALE"),
                       icon: Icons.female,
                       label: "FEMALE",
-                      color: Color.fromARGB(255, 123, 30, 23)),
+                      color: selectedGender == "FEMALE"
+                          ?const  Color.fromARGB(255, 123, 30, 23)
+                          : const Color(0xff141C22)),
                 ],
               ),
               const SizedBox(height: 20),
@@ -105,37 +116,44 @@ class _BmiScreenState extends State<BmiScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 40),
-
+             const Spacer(),
               // Calculate Button
               GestureDetector(
                 onTap: () {
                   // حساب BMI هنا مستقبلاً
                 },
-                child: Container(
-                  height: 50.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    color: const Color.fromARGB(255, 123, 30, 23),
-                  ),
-                  child: Center(
-                    child: Text(
+                child: Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 60),
+                      backgroundColor: const Color(0xff7B1C14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                    ),
+                    onPressed: () {
+                   double bmi = weight / ((height / 100) * (height / 100));
+                
+                  Navigator.pushNamed(context, '/result', arguments: bmi);
+                    },
+                    child: const  Text(
                       "CALCULATE",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25.sp),
-                    ),
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      
+                    ))
+                    )
                   ),
-                ),
-              ),
-            ],
-          ),
         ),
+      ],
       ),
+    ),
+      )
     );
-  }
+    
+      }
 }
 
 // 🔹 Widget مخصص لإعادة استخدام كروت الوزن والعمر
